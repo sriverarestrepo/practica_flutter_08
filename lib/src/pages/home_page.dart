@@ -15,17 +15,16 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: Text('Home'),
       ),
-      body: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-           Text('Email: ${bloc.email}'),
-           Divider(),
-           Text('Password: ${bloc.password}'),
-          ],
-        ),
-      ),
+      body: Container(),
+      floatingActionButton: _crearBoton(context),
      );
+  }
+
+  _crearBoton(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      backgroundColor: Theme.of(context).primaryColor,
+      onPressed: () => Navigator.pushNamed(context, 'producto'),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:crud_practica/src/pages/producto_page.dart';
 import 'package:flutter/material.dart';
 import 'package:crud_practica/src/bloc/provider.dart';
 import 'package:crud_practica/src/pages/home_page.dart';
@@ -12,10 +13,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Validaciones App',
-        initialRoute: 'login',
+        initialRoute: 'producto',
         routes: {
-          'login' : (BuildContext context) => LoginPage(),
-          'home'  : (BuildContext context) => HomePage(),
+          'login'     : (BuildContext context) => LoginPage(),
+          'home'      : (BuildContext context) => HomePage(),
+          'producto'  : (BuildContext context) => ProductoPage(),
         },
         theme: ThemeData(
           primaryColor: Colors.deepPurple,
