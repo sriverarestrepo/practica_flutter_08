@@ -1,5 +1,6 @@
-import 'package:crud_practica/src/models/producto_model.dart';
 import 'package:flutter/material.dart';
+import 'package:crud_practica/src/models/producto_model.dart';
+import 'package:crud_practica/src/providers/productos_provider.dart';
 import 'package:crud_practica/src/utils/utils.dart' as utils;
 
 class ProductoPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class ProductoPage extends StatefulWidget {
 class _ProductoPageState extends State<ProductoPage> {
 
   final formKey = GlobalKey<FormState>();
-
+  final productoProvider = new ProductosProvider();
   ProductoModel producto = new ProductoModel();
 
   @override
@@ -115,11 +116,12 @@ class _ProductoPageState extends State<ProductoPage> {
 
 
   void _submit(){
+    
     if(!formKey.currentState.validate()) return;
 
     formKey.currentState.save();
 
-    print('producto: ${producto.titulo}, ${producto.disponible}');
+    productoProvider.crearProducto(producto);
   }
 
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:crud_practica/src/bloc/provider.dart';
+import 'package:crud_practica/src/providers/productos_provider.dart';
+import 'package:crud_practica/src/models/producto_model.dart';
 
 class HomePage extends StatelessWidget {
 
-
-  const HomePage({Key key}) : super(key: key);
+  final productoProvider = new ProductosProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +16,27 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         title: Text('Home'),
       ),
-      body: Container(),
+      body: _cargarListadoProductos(),
       floatingActionButton: _crearBoton(context),
      );
+  }
+
+
+  _cargarListadoProductos() {
+    return FutureBuilder(
+      future: productoProvider.cargarProductos(),
+      builder: (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
+
+        if(snapshot.hasData){
+          return Container();
+        }else{
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+      },
+    );
   }
 
   _crearBoton(BuildContext context) {
@@ -27,4 +46,5 @@ class HomePage extends StatelessWidget {
       onPressed: () => Navigator.pushNamed(context, 'producto'),
     );
   }
+
 }
