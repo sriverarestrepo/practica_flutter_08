@@ -3,14 +3,20 @@ import 'package:crud_practica/src/bloc/provider.dart';
 import 'package:crud_practica/src/providers/productos_provider.dart';
 import 'package:crud_practica/src/models/producto_model.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
 
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final productoProvider = new ProductosProvider();
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
 
+    final bloc = Provider.of(context);
+    
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -20,7 +26,6 @@ class HomePage extends StatelessWidget {
       floatingActionButton: _crearBoton(context),
      );
   }
-
 
   _cargarListadoProductos() {
     return FutureBuilder(
@@ -48,7 +53,11 @@ class HomePage extends StatelessWidget {
     return FloatingActionButton(
       child: Icon(Icons.add),
       backgroundColor: Theme.of(context).primaryColor,
-      onPressed: () => Navigator.pushNamed(context, 'producto'),
+      onPressed: () => Navigator.pushNamed(
+        context, 
+        'producto').then((value) {
+          setState(() {});
+        }),
     );
   }
 
@@ -68,9 +77,10 @@ class HomePage extends StatelessWidget {
         onTap: () => Navigator.pushNamed(
           context, 
           'producto',
-          arguments: producto),
+          arguments: producto).then((value) {
+            setState(() {});
+          } ),
       ),
     );
   }
-
 }
