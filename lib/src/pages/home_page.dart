@@ -27,8 +27,13 @@ class HomePage extends StatelessWidget {
       future: productoProvider.cargarProductos(),
       builder: (BuildContext context, AsyncSnapshot<List<ProductoModel>> snapshot) {
 
+        final productos = snapshot.data;
         if(snapshot.hasData){
-          return Container();
+          return ListView.builder(
+            itemCount: productos.length,
+            itemBuilder: (BuildContext context, i) => _crearItemProducto(context, productos[i])          
+          );
+          
         }else{
           return Center(
             child: CircularProgressIndicator(),
@@ -44,6 +49,24 @@ class HomePage extends StatelessWidget {
       child: Icon(Icons.add),
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: () => Navigator.pushNamed(context, 'producto'),
+    );
+  }
+
+  _crearItemProducto(BuildContext context, ProductoModel producto) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: Colors.red,
+      ),
+      onDismissed: (direccion) {
+        print('$direccion');
+        productoProvider.borrarProducto(producto.id);
+      },
+      child: ListTile(
+        title: Text('${producto.titulo} -> ${producto.valor}'),
+        subtitle: Text('${producto.id}'),
+        onTap: () => Navigator.pushNamed(context, 'producto'),
+      ),
     );
   }
 
