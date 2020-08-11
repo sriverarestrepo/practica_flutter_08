@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:crud_practica/src/models/producto_model.dart';
 import 'package:crud_practica/src/providers/productos_provider.dart';
 import 'package:crud_practica/src/utils/utils.dart' as utils;
@@ -36,11 +37,11 @@ class _ProductoPageState extends State<ProductoPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.photo_size_select_actual),
-            onPressed: (){}
+            onPressed: _seleccionarImagen,
           ),
           IconButton(
             icon: Icon(Icons.camera_alt),
-            onPressed: (){}
+            onPressed: _capturarFoto,
           )
         ],
       ),
@@ -161,4 +162,16 @@ class _ProductoPageState extends State<ProductoPage> {
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
+
+  void _seleccionarImagen() {
+    ImagePicker().getImage(
+      source: ImageSource.gallery
+    );
+  }
+
+  void _capturarFoto() {
+    ImagePicker().getImage(
+      source: ImageSource.camera
+    );
+  }
 }
