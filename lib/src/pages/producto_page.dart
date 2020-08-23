@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:crud_practica/src/models/producto_model.dart';
 import 'package:crud_practica/src/providers/productos_provider.dart';
@@ -19,6 +20,8 @@ class _ProductoPageState extends State<ProductoPage> {
   ProductoModel producto = new ProductoModel();
 
   bool _guardando = false;
+
+  PickedFile foto;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +55,7 @@ class _ProductoPageState extends State<ProductoPage> {
             key: formKey,
             child: Column(
               children: [
+                _mostrarFoto(),
                 _crearNombre(),
                 _crearPrecio(),
                 _crearDisponible(),
@@ -128,7 +132,7 @@ class _ProductoPageState extends State<ProductoPage> {
   }
 
 
-  void _submit(){
+  void _submit() async{
     String msg = '';
 
     if(!formKey.currentState.validate()) return;
@@ -136,6 +140,10 @@ class _ProductoPageState extends State<ProductoPage> {
     formKey.currentState.save();
 
     setState(() {_guardando = true;});
+
+    if(foto != null){
+      producto.fotoUrl = await productoProvider.subirImagen(foto);
+    }
 
     if(producto.id == null){
       productoProvider.crearProducto(producto);
@@ -162,16 +170,45 @@ class _ProductoPageState extends State<ProductoPage> {
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
+  _mostrarFoto(){
+    if (producto.fotoUrl != null) {
+       return FadeInImage(
+         image: NetworkImage(producto.fotoUrl),
+         placeholder: AssetImage('assets/jar-loading.gif'),
+         height: 300.0,
+         fit: BoxFit.contain,
+       );     
+    }else {
+       if( foto != null ){
+        return Image.file(
+          File(foto.path),
+          fit: BoxFit.cover,
+          height: 300.0,
+        );
+      }
+      return Image.asset('assets/no-image.png');
+    }
+
+  }
+
 
   void _seleccionarImagen() {
-    ImagePicker().getImage(
-      source: ImageSource.gallery
-    );
+     _procesarImagen(ImageSource.gallery);
   }
 
   void _capturarFoto() {
-    ImagePicker().getImage(
-      source: ImageSource.camera
+       _procesarImagen(ImageSource.camera);
+  }
+
+  _procesarImagen(ImageSource imageSource) async{
+     foto = await ImagePicker().getImage(
+      source: imageSource
     );
+
+    if(foto != null){
+      producto.fotoUrl = null;
+    }
+
+    setState(() { });
   }
 }
